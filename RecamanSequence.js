@@ -3,7 +3,7 @@ let count; //  stepNumber   1,2,3,4,5, ...
 let sequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
 let index; // Recaman Sequence current position/index
 let arcs; // save arcs (semi-circles)
-let biggest;
+let biggest; // further most point on X axis
 
 function initialize() {
     numbers = [];
@@ -17,7 +17,6 @@ function initialize() {
 function setup() {
     initialize();
     createCanvas(windowWidth, windowHeight);
-    // background('black');
 }
 
 function draw() {
@@ -46,6 +45,13 @@ function step() {
 
     let a = new Arc(index, next, count % 2);
     arcs.push(a);
+
+
+
+
+
+
+
 
     // let diameter = abs(next - index);
     // let x = (next + index) / 2;
