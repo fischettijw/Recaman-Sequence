@@ -1,90 +1,62 @@
-let numbers; // hasLanded      number already landed on
+let hasLanded;
 let count; //  stepNumber   1,2,3,4,5, ...
-let sequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
-let index; // Recaman Sequence current position/index
-let arcs; // save arcs (semi-circles)
-let biggest; // further most point on X axis
+let recamanSequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
+let index;
+let arcs;
+let furtherRight;
 
 function initialize() {
-    numbers = [];
+    hasLanded = [];
     count = 0;
-    sequence = [];
+    recamanSequence = [];
     index = 0;
     arcs = [];
-    biggest = 0;
+    furtherRight = 0;
 }
 
 function setup() {
     initialize();
     createCanvas(windowWidth, windowHeight);
+    frameRate();
 }
 
 function draw() {
     background('black');
     step();
-    debugOutput();
-    translate(0, height / 2);
-    scale(width / biggest); //   scale(width / count);  
-
-    for (let ar of arcs) {
-        ar.show();
-    }
-
+    // debugOutput();
+    drawArcs();
 }
 
-
-
+function drawArcs() {
+    translate(0, height / 2);
+    scale(width / furtherRight);
+    for (let nextArc of arcs) {
+        nextArc.show();
+    }
+}
 
 function step() {
     let next = index - count;
-    if (next < 0 || numbers[next]) {
+    if (next < 0 || hasLanded[next]) {
         next = index + count;
     }
-    numbers[next] = true;
-    sequence.push(next);
+    hasLanded[next] = true;
+    recamanSequence.push(next);
 
     let a = new Arc(index, next, count % 2);
     arcs.push(a);
 
-
-
-
-
-
-
-
-    // let diameter = abs(next - index);
-    // let x = (next + index) / 2;
-
-    // stroke('white');
-    // strokeWeight(1);
-    // noFill();
-    // if (count % 2 == 0) {
-    //     arc(x, height / 2, diameter, diameter, PI, 0);
-    // } else {
-    //     arc(x, height / 2, diameter, diameter, 0, PI);
-    // }
-    // arc(x, height / 2, diameter, diameter, 0, PI);
-    // ellipse(x, height / 2, diameter);
-
-
     index = next;
-
-    if (index > biggest) { biggest = index; }
-
+    if (index > furtherRight) { furtherRight = index; }
     count++;
-
 }
-
-
 
 function debugOutput() {
-    // if (frameCount >= 200) {
-    //     noLoop();
-    //     // print(sequence);
-    // }
+    if (frameCount >= 200) {
+        noLoop();
+        print(recamanSequence);
+    }
 }
-
 
 class Arc {
     constructor(start, end, dir) {
