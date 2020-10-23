@@ -3,6 +3,7 @@ let count; //  stepNumber   1,2,3,4,5, ...
 let sequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
 let index; // Recaman Sequence current position/index
 let arcs; // save arcs (semi-circles)
+let biggest;
 
 function initialize() {
     numbers = [];
@@ -10,11 +11,12 @@ function initialize() {
     sequence = [];
     index = 0;
     arcs = [];
+    biggest = 0;
 }
 
 function setup() {
     initialize();
-    createCanvas(500, 500);
+    createCanvas(windowWidth, windowHeight);
     // background('black');
 }
 
@@ -22,6 +24,8 @@ function draw() {
     background('black');
     step();
     debugOutput();
+    translate(0, height / 2);
+    scale(width / biggest); //   scale(width / count);  
 
     for (let ar of arcs) {
         ar.show();
@@ -59,6 +63,9 @@ function step() {
 
 
     index = next;
+
+    if (index > biggest) { biggest = index; }
+
     count++;
 
 }
@@ -66,10 +73,10 @@ function step() {
 
 
 function debugOutput() {
-    if (frameCount >= 200) {
-        noLoop();
-        // print(sequence);
-    }
+    // if (frameCount >= 200) {
+    //     noLoop();
+    //     // print(sequence);
+    // }
 }
 
 
@@ -88,9 +95,9 @@ class Arc {
         strokeWeight(1);
         noFill();
         if (this.dir == 0) {
-            arc(x, height / 2, diameter, diameter, PI, 0);
+            arc(x, 0, diameter, diameter, PI, 0); // height / 2
         } else {
-            arc(x, height / 2, diameter, diameter, 0, PI);
+            arc(x, 0, diameter, diameter, 0, PI); // height / 2
         }
     }
 }
