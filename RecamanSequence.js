@@ -4,6 +4,7 @@ let recamanSequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
 let index;
 let arcs;
 let furtherRight;
+let screenScale;
 
 function initialize() {
     hasLanded = [];
@@ -12,6 +13,7 @@ function initialize() {
     index = 0;
     arcs = [];
     furtherRight = 0;
+    screenScale = 1;
 }
 
 function setup() {
@@ -29,7 +31,8 @@ function draw() {
 
 function drawArcs() {
     translate(0, height / 2);
-    scale(width / furtherRight);
+    screenScale = width / furtherRight;
+    scale(screenScale);
     for (let nextArc of arcs) {
         nextArc.show();
     }
@@ -52,9 +55,10 @@ function step() {
 }
 
 function debugOutput() {
-    if (frameCount >= 200) {
+    if (screenScale < 1) {
+        console.log(recamanSequence);
+        debugger;
         noLoop();
-        print(recamanSequence);
     }
 }
 
