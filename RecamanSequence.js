@@ -1,6 +1,6 @@
 let hasLanded;
-let stepCount; //  stepNumber   1,2,3,4,5, ...
-let recamanSequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
+let sequenceIndex; //   1,2,3,4,5, ....
+let recamanSequence; // Calculated Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11, ....
 let lastLanded; // 
 let arcs;
 let furthestRight;
@@ -8,7 +8,7 @@ let screenScale;
 
 function initialize() {
     hasLanded = [];
-    stepCount = 0;
+    sequenceIndex = 0;
     recamanSequence = [];
     lastLanded = 0;
     arcs = [];
@@ -19,13 +19,13 @@ function initialize() {
 function setup() {
     initialize();
     createCanvas(windowWidth, windowHeight);
-    frameRate();
+    frameRate(1);
 }
 
 function draw() {
     background('black');
     step();
-    debugOutput();
+    // debugOutput();
     drawArcs();
 }
 
@@ -39,19 +39,22 @@ function drawArcs() {
 }
 
 function step() {
-    let next = lastLanded - stepCount;
+    let next = lastLanded - sequenceIndex;
     if (next < 0 || hasLanded[next]) {
-        next = lastLanded + stepCount;
+        next = lastLanded + sequenceIndex;
     }
     hasLanded[next] = true;
-    recamanSequence.push(next);
 
-    let a = new Arc(lastLanded, next, stepCount % 2);
+    if (recamanSequence.includes(next, 0) == false) {
+        recamanSequence.push(next);
+    }
+
+    let a = new Arc(lastLanded, next, sequenceIndex % 2);
     arcs.push(a);
 
     lastLanded = next;
     if (lastLanded > furthestRight) { furthestRight = lastLanded; }
-    stepCount++;
+    sequenceIndex++;
 }
 
 function debugOutput() {
@@ -63,7 +66,7 @@ function debugOutput() {
 }
 
 class Arc {
-    static clrs = ['white', 'blue', 'red', 'yellow', 'magenta'];
+    static clrs = ['white', 'blue']; //['white', 'blue', 'red', 'yellow', 'magenta'];
     constructor(start, end, dir) {
         this.start = start;
         this.end = end;
