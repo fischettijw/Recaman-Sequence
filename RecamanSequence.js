@@ -1,19 +1,19 @@
 let hasLanded;
-let count; //  stepNumber   1,2,3,4,5, ...
+let stepCount; //  stepNumber   1,2,3,4,5, ...
 let recamanSequence; // Recaman Sequence   0,1,3,6,2,7,13,20,12,21,11
-let index;
+let lastLanded; // 
 let arcs;
-let furtherRight;
+let furthestRight;
 let screenScale;
 
 function initialize() {
     hasLanded = [];
-    count = 0;
+    stepCount = 0;
     recamanSequence = [];
-    index = 0;
+    lastLanded = 0;
     arcs = [];
-    furtherRight = 0;
-    screenScale = 1;
+    furthestRight = 0;
+    screenScale = windowWidth;
 }
 
 function setup() {
@@ -25,13 +25,13 @@ function setup() {
 function draw() {
     background('black');
     step();
-    // debugOutput();
+    debugOutput();
     drawArcs();
 }
 
 function drawArcs() {
     translate(0, height / 2);
-    screenScale = width / furtherRight;
+    screenScale = width / furthestRight;
     scale(screenScale);
     for (let nextArc of arcs) {
         nextArc.show();
@@ -39,23 +39,23 @@ function drawArcs() {
 }
 
 function step() {
-    let next = index - count;
+    let next = lastLanded - stepCount;
     if (next < 0 || hasLanded[next]) {
-        next = index + count;
+        next = lastLanded + stepCount;
     }
     hasLanded[next] = true;
     recamanSequence.push(next);
 
-    let a = new Arc(index, next, count % 2);
+    let a = new Arc(lastLanded, next, stepCount % 2);
     arcs.push(a);
 
-    index = next;
-    if (index > furtherRight) { furtherRight = index; }
-    count++;
+    lastLanded = next;
+    if (lastLanded > furthestRight) { furthestRight = lastLanded; }
+    stepCount++;
 }
 
 function debugOutput() {
-    if (screenScale < 1) {
+    if (screenScale < 2) {
         console.log(recamanSequence);
         debugger;
         noLoop();
@@ -63,19 +63,22 @@ function debugOutput() {
 }
 
 class Arc {
+    static clrs = ['white', 'blue', 'red', 'yellow', 'magenta'];
     constructor(start, end, dir) {
         this.start = start;
         this.end = end;
         this.dir = dir;
+        this.clr = random(Arc.clrs);
     }
 
     show() {
         let diameter = abs(this.end - this.start);
         let x = (this.end + this.start) / 2;
 
-        stroke('white');
+        stroke(this.clr);
         strokeWeight(1);
         noFill();
+
         if (this.dir == 0) {
             arc(x, 0, diameter, diameter, PI, 0); // height / 2
         } else {
